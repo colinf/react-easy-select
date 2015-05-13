@@ -72,12 +72,10 @@ export default class SimpleSelect extends React.Component {
       if (nextOptions.indexOf(inputValue) === -1) {
         nextOptions.unshift(inputValue);
         if (this.props.onNewValue) {
-          console.log('Firing onNewValue'+inputValue);
           this.props.onNewValue(inputValue);
         }
       }
     }
-    console.dir(nextOptions);
     this.setState({
       value: nextValue,
       mode: mode.SELECT,
