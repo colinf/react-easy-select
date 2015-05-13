@@ -25170,9 +25170,27 @@ var mode = {
 var OTHER = 'Other...';
 
 var styles = {
-  simpleSelect: {},
-  select: {},
-  input: {}
+  simpleSelect: {
+    width: 120
+  },
+  select: {
+    width: '100%'
+  },
+  input: {
+    width: '68%'
+  },
+  confirmButton: {
+    width: '10%',
+    color: 'green',
+    paddingLeft: 2,
+    paddingRight: 10
+  },
+  cancelButton: {
+    width: '10%',
+    color: 'red',
+    paddingLeft: 2,
+    paddingRight: 10
+  }
 };
 
 function renderOption(option, i) {
@@ -25188,9 +25206,17 @@ var SimpleSelect = (function (_React$Component) {
     _classCallCheck(this, SimpleSelect);
 
     _get(Object.getPrototypeOf(SimpleSelect.prototype), 'constructor', this).call(this, props);
+    var options = Array.from(this.props.options);
+    if (this.props.allowBlank) {
+      options.unshift('');
+    }
+    if (this.props.allowOtherValues) {
+      options.push(OTHER);
+    }
     this.state = {
       mode: 'select',
-      value: this.props.value
+      value: this.props.value,
+      options: options
     };
     this.onChangeSelect = this.onChangeSelect.bind(this);
     this.onConfirmClicked = this.onConfirmClicked.bind(this);
@@ -25211,15 +25237,23 @@ var SimpleSelect = (function (_React$Component) {
     key: 'onConfirmClicked',
     value: function onConfirmClicked() {
       var inputValue = this.refs.input.getDOMNode().value;
-      if (inputValue) {
-        this.setState({
-          value: inputValue,
-          mode: mode.SELECT
-        });
+      var nextValue = this.state.value;
+      var nextOptions = Array.from(this.state.options);
+      if ((inputValue || this.props.allowBlank) && inputValue !== nextValue) {
+        nextValue = inputValue;
+        if (nextOptions.indexOf(inputValue) === -1) {
+          nextOptions.unshift(inputValue);
+          if (this.props.onNewValue) {
+            console.log('Firing onNewValue' + inputValue);
+            this.props.onNewValue(inputValue);
+          }
+        }
       }
-
+      console.dir(nextOptions);
       this.setState({
-        mode: mode.SELECT
+        value: nextValue,
+        mode: mode.SELECT,
+        options: nextOptions
       });
     }
   }, {
@@ -25252,13 +25286,6 @@ var SimpleSelect = (function (_React$Component) {
   }, {
     key: 'renderSelect',
     value: function renderSelect(styles) {
-      var options = Array.from(this.props.options);
-      if (this.props.allowBlank) {
-        options.unshift('');
-      }
-      if (this.props.allowOtherValues) {
-        options.push(OTHER);
-      }
       return _react2['default'].createElement(
         'div',
         { style: styles.simpleSelect },
@@ -25269,7 +25296,7 @@ var SimpleSelect = (function (_React$Component) {
             onChange: this.onChangeSelect,
             style: styles.select
           },
-          options.map(renderOption)
+          this.state.options.map(renderOption)
         )
       );
     }
@@ -25280,7 +25307,8 @@ var SimpleSelect = (function (_React$Component) {
       return _react2['default'].createElement(
         'div',
         { style: styles.simpleSelect },
-        _react2['default'].createElement('input', { type: 'text',
+        _react2['default'].createElement('input', { autoFocus: true,
+          type: 'text',
           ref: 'input',
           name: this.props.name,
           onKeyDown: this.onInputKeyDown,
@@ -25288,13 +25316,13 @@ var SimpleSelect = (function (_React$Component) {
         }),
         _react2['default'].createElement(
           'button',
-          { type: 'button', onClick: this.onConfirmClicked },
-          'Y'
+          { type: 'button', style: styles.confirmButton, onClick: this.onConfirmClicked },
+          '✔'
         ),
         _react2['default'].createElement(
           'button',
-          { type: 'button', onClick: this.onCancelClicked },
-          'X'
+          { type: 'button', style: styles.cancelButton, onClick: this.onCancelClicked },
+          '✘'
         )
       );
     }
@@ -25322,7 +25350,8 @@ SimpleSelect.propTypes = {
   value: _react2['default'].PropTypes.string,
   styles: _react2['default'].PropTypes.object,
   allowBlank: _react2['default'].PropTypes.bool,
-  allowOtherValues: _react2['default'].PropTypes.bool
+  allowOtherValues: _react2['default'].PropTypes.bool,
+  onNewValue: _react2['default'].PropTypes.func
 };
 module.exports = exports['default'];
 

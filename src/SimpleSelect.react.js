@@ -9,10 +9,25 @@ let OTHER = 'Other...';
 
 let styles = {
   simpleSelect: {
+    width: 120
   },
   select: {
+    width: '100%'
   },
   input: {
+    width: '68%'
+  },
+  confirmButton: {
+    width: '10%',
+    color: 'green',
+    paddingLeft: 2,
+    paddingRight: 10
+  },
+  cancelButton: {
+    width: '10%',
+    color: 'red',
+    paddingLeft: 2,
+    paddingRight: 10
   }
 };
 
@@ -24,9 +39,17 @@ export default class SimpleSelect extends React.Component {
 
   constructor(props) {
     super(props);
+    let options = Array.from(this.props.options);
+    if (this.props.allowBlank) {
+      options.unshift('');
+    }
+    if (this.props.allowOtherValues) {
+      options.push(OTHER);
+    }
     this.state = {
       mode: 'select',
-      value: this.props.value
+      value: this.props.value,
+      options: options
     };
     this.onChangeSelect = this.onChangeSelect.bind(this);
     this.onConfirmClicked = this.onConfirmClicked.bind(this);
@@ -42,15 +65,23 @@ export default class SimpleSelect extends React.Component {
 
   onConfirmClicked() {
     let inputValue = this.refs.input.getDOMNode().value;
-    if (inputValue) {
-      this.setState({
-        value: inputValue,
-        mode: mode.SELECT 
-      });
+    let nextValue = this.state.value;
+    let nextOptions = Array.from(this.state.options);
+    if ((inputValue || this.props.allowBlank) && inputValue !== nextValue) {
+      nextValue = inputValue;
+      if (nextOptions.indexOf(inputValue) === -1) {
+        nextOptions.unshift(inputValue);
+        if (this.props.onNewValue) {
+          console.log('Firing onNewValue'+inputValue);
+          this.props.onNewValue(inputValue);
+        }
+      }
     }
-
+    console.dir(nextOptions);
     this.setState({
-        mode: mode.SELECT 
+      value: nextValue,
+      mode: mode.SELECT,
+      options: nextOptions
     });
   }
 
@@ -79,13 +110,6 @@ export default class SimpleSelect extends React.Component {
   }
 
   renderSelect(styles) {
-    let options = Array.from(this.props.options);
-    if (this.props.allowBlank) {
-      options.unshift('');
-    }
-    if (this.props.allowOtherValues) {
-      options.push(OTHER);
-    }
     return (
       <div style={styles.simpleSelect}>
         <select name={this.props.name}
@@ -93,7 +117,7 @@ export default class SimpleSelect extends React.Component {
           onChange={this.onChangeSelect}
           style={styles.select}
         >
-          {options.map(renderOption)}
+          {this.state.options.map(renderOption)}
         </select>
       </div>
     );    
@@ -103,14 +127,15 @@ export default class SimpleSelect extends React.Component {
 
     return (
       <div style={styles.simpleSelect}>
-        <input type='text'
+        <input autoFocus
+          type='text'
           ref='input'
           name={this.props.name}
           onKeyDown={this.onInputKeyDown}
           style={styles.input}
         />
-        <button type='button' onClick={this.onConfirmClicked}>Y</button>
-        <button type='button' onClick={this.onCancelClicked}>X</button>
+        <button type='button' style={styles.confirmButton} onClick={this.onConfirmClicked}>✔</button>
+        <button type='button' style={styles.cancelButton} onClick={this.onCancelClicked}>✘</button>
       </div>
     );
   }
@@ -134,5 +159,6 @@ SimpleSelect.propTypes = {
   value: React.PropTypes.string,
   styles: React.PropTypes.object,
   allowBlank: React.PropTypes.bool,
-  allowOtherValues: React.PropTypes.bool
+  allowOtherValues: React.PropTypes.bool,
+  onNewValue: React.PropTypes.func
 };

@@ -4,7 +4,7 @@ global.window = document.defaultView;
 global.navigator = window.navigator;
 
 import should from 'should';
-let React, SimpleSelect, TestUtils, aSimpleSelect;
+let React, SimpleSelect, TestUtils, aSimpleSelect, newValue;
 
 let teams = ['Aberdeen', 'Celtic', 'Motherwell', 'Hamilton'];
 let OTHER = 'Other...';
@@ -219,11 +219,18 @@ describe('SimpleSelect', function() {
     });
   });
 
-  describe('select other, enter new value and click confirm button', function() {
+  describe('select other, enter existing value and click confirm button', function() {
 
     before(function() {
+      newValue = 'none';
       aSimpleSelect = TestUtils.renderIntoDocument(
-        <SimpleSelect name='homeTeam' options={teams} value={teams[2]} allowOtherValues={true}/>
+        <SimpleSelect name='homeTeam'
+          options={teams}
+          value={teams[2]}
+          allowOtherValues={true}
+          onNewValue={newVal => {
+            newValue = newVal;
+          }}/>
       );
       let select = TestUtils.findRenderedDOMComponentWithTag(
         aSimpleSelect, 'select');
@@ -248,9 +255,58 @@ describe('SimpleSelect', function() {
     it('does have correct select attributes', function() {
       let select = TestUtils.findRenderedDOMComponentWithTag(
               aSimpleSelect, 'select');
+      console.log(teams);
       select.getDOMNode().name.should.equal('homeTeam');
       select.getDOMNode().value.should.equal(teams[3]);
 
+    });
+    it('does not emit a new value', () => {
+      newValue.should.equal('none');
+    });
+  });
+
+  describe('select other, enter new value and click confirm button', function() {
+
+    before(function() {
+      newValue = 'none';
+      aSimpleSelect = TestUtils.renderIntoDocument(
+        <SimpleSelect name='homeTeam'
+          options={teams}
+          value={teams[2]}
+          allowOtherValues={true}
+          onNewValue={newVal => {
+            newValue = newVal;
+          }}/>
+      );
+      let select = TestUtils.findRenderedDOMComponentWithTag(
+        aSimpleSelect, 'select');
+      TestUtils.Simulate.change(select, {target: {value: OTHER}});
+      let confirmButton = TestUtils.scryRenderedDOMComponentsWithTag(
+        aSimpleSelect, 'button')[0];
+      let input = TestUtils.findRenderedDOMComponentWithTag(
+              aSimpleSelect, 'input');
+      React.findDOMNode(input).value = 'New Team';
+      TestUtils.Simulate.click(confirmButton);
+
+    });
+
+    it('does not render an input', function() {
+      (() => {TestUtils.findRenderedDOMComponentWithTag(
+              aSimpleSelect, 'input');}).should.throw();
+    });
+    it('does render a select', function() {
+      (() => {TestUtils.findRenderedDOMComponentWithTag(
+              aSimpleSelect, 'select');}).should.not.throw();
+    });
+    it('does have correct select attributes', function() {
+      let select = TestUtils.findRenderedDOMComponentWithTag(
+              aSimpleSelect, 'select');
+      select.getDOMNode().name.should.equal('homeTeam');
+      select.getDOMNode().value.should.equal('New Team');
+
+    });
+    it('does emit a new value', () => {
+      newValue.should.equal('New Team');
     });
   });
 
