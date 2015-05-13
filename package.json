@@ -1,0 +1,39 @@
+{
+  "name": "react-simple-select",
+  "version": "0.0.1",
+  "description": "An ES6 react html select element, allowing entry of other values and with inline styles",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --compilers js:babel/register"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/colinf/react-simple-select.git"
+  },
+  "keywords": [
+    "reactjs",
+    "html",
+    "select"
+  ],
+  "author": "Colin Fallon",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/colinf/react-simple-select/issues"
+  },
+  "homepage": "https://github.com/colinf/react-simple-select",
+  "dependencies": {
+    "lodash.merge": "^3.2.1",
+    "react": "^0.13.2"
+  },
+  "devDependencies": {
+    "babel": "^5.2.16",
+    "babelify": "^6.0.2",
+    "browserify": "^9.0.8",
+    "gulp": "^3.8.11",
+    "gulp-webserver": "^0.9.1",
+    "jsdom": "^5.4.1",
+    "mocha": "2.1.0",
+    "should": "^6.0.1",
+    "vinyl-source-stream": "^1.1.0"
+  }
+}
