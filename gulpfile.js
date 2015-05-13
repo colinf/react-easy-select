@@ -45,4 +45,4 @@ gulp.task('watch', function() {
 });
 
 gulp.task('example', ['example/build', 'webserver', 'example/watch']);
-gulp.task('default', ['js', 'webserver', 'watch']);
+gulp.task('default', ['js']);
