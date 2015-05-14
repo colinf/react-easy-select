@@ -255,7 +255,6 @@ describe('SimpleSelect', function() {
     it('does have correct select attributes', function() {
       let select = TestUtils.findRenderedDOMComponentWithTag(
               aSimpleSelect, 'select');
-      console.log(teams);
       select.getDOMNode().name.should.equal('homeTeam');
       select.getDOMNode().value.should.equal(teams[3]);
 

@@ -1,48 +1,35 @@
 var gulp = require('gulp');
 var source = require('vinyl-source-stream');
 var browserify = require('browserify');
+var babel = require('gulp-babel');
 var babelify = require('babelify');
-var webserver = require('gulp-webserver');
 
 var path = {
-  MINIFIED_OUT: 'bundle.min.js',
-  OUT: 'bundle.js',
-  DEST: 'dist',
   EXAMPLE: 'example',
-  EXAMPLE_APP: './example/app.js',
-  ENTRY_POINT: './src/SimpleSelect.react.js'
+  EXAMPLE_APP: './src/example/example-app.js',
+  LIB: 'lib',
+  OUT: 'bundle.js',
+  SRC: 'src/**.js*'
 };
 
-gulp.task('js', function(){
-    browserify(path.ENTRY_POINT)
-        .transform(babelify)
-        .bundle()
-        .pipe(source(path.OUT))
-        .pipe(gulp.dest(path.DEST));
+gulp.task('build/lib', function(){
+  return gulp.src(path.SRC)
+    .pipe(babel())
+    .pipe(gulp.dest(path.LIB));
 });
 
-gulp.task('example/build', function(){
+gulp.task('build/example', function(){
     browserify(path.EXAMPLE_APP)
         .transform(babelify)
         .bundle()
         .pipe(source(path.OUT))
         .pipe(gulp.dest(path.EXAMPLE));
 });
-gulp.task('example/watch', function() {
-    gulp.watch("./src/**/*.js*", ["example/build"]);
+
+gulp.task('watch/example', function() {
+    gulp.watch("./src/**/*.js*", ['build/example']);
 });
 
-gulp.task('webserver', function() {
-  gulp.src(path.EXAMPLE)
-    .pipe(webserver({
-      fallback: 'index.html',
-      open: true
-    }));
-});
-
-gulp.task('watch', function() {
-    gulp.watch("./src/**/*.js*", ["js"]);
-});
-
-gulp.task('example', ['example/build', 'webserver', 'example/watch']);
-gulp.task('default', ['js']);
+gulp.task('build', ['build/example', 'build/lib']);
+gulp.task('example', ['build/example', 'watch/example']);
+gulp.task('default', ['build']);

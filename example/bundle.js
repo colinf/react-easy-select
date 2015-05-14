@@ -9,16 +9,19 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _srcSimpleSelectReact = require('../src/SimpleSelect.react');
+var _SimpleSelectReact = require('../SimpleSelect.react');
 
-var _srcSimpleSelectReact2 = _interopRequireDefault(_srcSimpleSelectReact);
+var _SimpleSelectReact2 = _interopRequireDefault(_SimpleSelectReact);
 
 var teams = ['Aberdeen', 'Celtic', 'Motherwell', 'Hamilton'];
 var OTHER = 'Other...';
 
-_react2['default'].render(_react2['default'].createElement(_srcSimpleSelectReact2['default'], { name: 'homeTeam', options: teams, value: teams[2], allowOtherValues: true }), document.getElementById('ex1'));
+_react2['default'].render(_react2['default'].createElement(_SimpleSelectReact2['default'], { name: 'homeTeam', options: teams, value: teams[2], allowOtherValues: true }), document.getElementById('ex1'));
+_react2['default'].render(_react2['default'].createElement(_SimpleSelectReact2['default'], { name: 'awayTeam', options: teams, value: teams[1], allowOtherValues: true }), document.getElementById('ex2'));
+_react2['default'].render(_react2['default'].createElement(_SimpleSelectReact2['default'], { name: 'awayTeam', options: teams, value: teams[1], allowOtherValues: true }), document.getElementById('ex3'));
+_react2['default'].render(_react2['default'].createElement(_SimpleSelectReact2['default'], { name: 'awayTeam', options: teams, value: teams[1], allowOtherValues: true }), document.getElementById('ex4'));
 
-},{"../src/SimpleSelect.react":263,"babelify/polyfill":89,"react":262}],2:[function(require,module,exports){
+},{"../SimpleSelect.react":263,"babelify/polyfill":89,"react":262}],2:[function(require,module,exports){
 (function (global){
 "use strict";
 
@@ -25244,12 +25247,10 @@ var SimpleSelect = (function (_React$Component) {
         if (nextOptions.indexOf(inputValue) === -1) {
           nextOptions.unshift(inputValue);
           if (this.props.onNewValue) {
-            console.log('Firing onNewValue' + inputValue);
             this.props.onNewValue(inputValue);
           }
         }
       }
-      console.dir(nextOptions);
       this.setState({
         value: nextValue,
         mode: mode.SELECT,
