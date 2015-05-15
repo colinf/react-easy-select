@@ -16,10 +16,36 @@ var _SimpleSelectReact2 = _interopRequireDefault(_SimpleSelectReact);
 var teams = ['Aberdeen', 'Celtic', 'Motherwell', 'Hamilton'];
 var OTHER = 'Other...';
 
-_react2['default'].render(_react2['default'].createElement(_SimpleSelectReact2['default'], { name: 'homeTeam', options: teams, value: teams[2], allowOtherValues: true }), document.getElementById('ex1'));
-_react2['default'].render(_react2['default'].createElement(_SimpleSelectReact2['default'], { name: 'awayTeam', options: teams, value: teams[1], allowOtherValues: true }), document.getElementById('ex2'));
-_react2['default'].render(_react2['default'].createElement(_SimpleSelectReact2['default'], { name: 'awayTeam', options: teams, value: teams[1], allowOtherValues: true }), document.getElementById('ex3'));
-_react2['default'].render(_react2['default'].createElement(_SimpleSelectReact2['default'], { name: 'awayTeam', options: teams, value: teams[1], allowOtherValues: true }), document.getElementById('ex4'));
+function handleChange(change) {
+    document.getElementById(change.select.name + '-result').innerHTML = 'Selected value: ' + change.select.value + (change.newValue ? ' (new value)' : '');
+}
+//Example 1
+_react2['default'].render(_react2['default'].createElement(_SimpleSelectReact2['default'], { name: 'ex1',
+    options: teams,
+    value: teams[1],
+    onChange: handleChange }), document.getElementById('ex1'));
+//Example 2
+_react2['default'].render(_react2['default'].createElement(_SimpleSelectReact2['default'], { name: 'ex2',
+    options: teams,
+    value: teams[2],
+    allowOtherValues: true,
+    onChange: handleChange }), document.getElementById('ex2'));
+//Example 3
+_react2['default'].render(_react2['default'].createElement(_SimpleSelectReact2['default'], { name: 'ex3',
+    options: teams,
+    allowOtherValues: true,
+    allowBlank: true,
+    onChange: handleChange,
+    styles: {
+        confirmButton: {
+            backgroundColor: 'green',
+            color: 'black'
+        },
+        cancelButton: {
+            backgroundColor: 'red',
+            color: 'black'
+        }
+    } }), document.getElementById('ex3'));
 
 },{"../SimpleSelect.react":263,"babelify/polyfill":89,"react":262}],2:[function(require,module,exports){
 (function (global){
@@ -25216,6 +25242,7 @@ var SimpleSelect = (function (_React$Component) {
     if (this.props.allowOtherValues) {
       options.push(OTHER);
     }
+    this.newValue = false;
     this.state = {
       mode: 'select',
       value: this.props.value,
@@ -25230,6 +25257,17 @@ var SimpleSelect = (function (_React$Component) {
   _inherits(SimpleSelect, _React$Component);
 
   _createClass(SimpleSelect, [{
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate(prevProps, prevState) {
+      if (this.props.onChange && this.state.value !== prevState.value) {
+        this.props.onChange({
+          select: _react2['default'].findDOMNode(this.refs.select),
+          newValue: Boolean(this.newValue)
+        });
+      }
+      this.newValue = false;
+    }
+  }, {
     key: 'onCancelClicked',
     value: function onCancelClicked() {
       this.setState({
@@ -25246,9 +25284,7 @@ var SimpleSelect = (function (_React$Component) {
         nextValue = inputValue;
         if (nextOptions.indexOf(inputValue) === -1) {
           nextOptions.unshift(inputValue);
-          if (this.props.onNewValue) {
-            this.props.onNewValue(inputValue);
-          }
+          this.newValue = true;
         }
       }
       this.setState({
@@ -25279,9 +25315,11 @@ var SimpleSelect = (function (_React$Component) {
           mode: mode.INPUT
         });
       } else {
-        this.setState({
-          value: event.target.value
-        });
+        if (this.state.value !== event.target.value) {
+          this.setState({
+            value: event.target.value
+          });
+        }
       }
     }
   }, {
@@ -25293,6 +25331,7 @@ var SimpleSelect = (function (_React$Component) {
         _react2['default'].createElement(
           'select',
           { name: this.props.name,
+            ref: 'select',
             value: this.state.value,
             onChange: this.onChangeSelect,
             style: styles.select
@@ -25352,7 +25391,7 @@ SimpleSelect.propTypes = {
   styles: _react2['default'].PropTypes.object,
   allowBlank: _react2['default'].PropTypes.bool,
   allowOtherValues: _react2['default'].PropTypes.bool,
-  onNewValue: _react2['default'].PropTypes.func
+  onChange: _react2['default'].PropTypes.func
 };
 module.exports = exports['default'];
 

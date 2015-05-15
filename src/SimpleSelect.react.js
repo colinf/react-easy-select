@@ -46,6 +46,7 @@ export default class SimpleSelect extends React.Component {
     if (this.props.allowOtherValues) {
       options.push(OTHER);
     }
+    this.newValue = false;
     this.state = {
       mode: 'select',
       value: this.props.value,
@@ -55,6 +56,17 @@ export default class SimpleSelect extends React.Component {
     this.onConfirmClicked = this.onConfirmClicked.bind(this);
     this.onCancelClicked = this.onCancelClicked.bind(this);
     this.onInputKeyDown = this.onInputKeyDown.bind(this);
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.onChange &&
+        this.state.value !== prevState.value) {
+      this.props.onChange({
+        select: React.findDOMNode(this.refs.select),
+        newValue: Boolean(this.newValue)
+      });
+    }
+    this.newValue = false;
   }
 
   onCancelClicked() {
@@ -71,9 +83,7 @@ export default class SimpleSelect extends React.Component {
       nextValue = inputValue;
       if (nextOptions.indexOf(inputValue) === -1) {
         nextOptions.unshift(inputValue);
-        if (this.props.onNewValue) {
-          this.props.onNewValue(inputValue);
-        }
+        this.newValue = true;
       }
     }
     this.setState({
@@ -101,9 +111,11 @@ export default class SimpleSelect extends React.Component {
           mode: mode.INPUT
       });
     } else {
-      this.setState({
-        value: event.target.value
-      });
+      if (this.state.value !== event.target.value) {
+        this.setState({
+          value: event.target.value
+        });        
+      }
     }
   }
 
@@ -111,6 +123,7 @@ export default class SimpleSelect extends React.Component {
     return (
       <div style={styles.simpleSelect}>
         <select name={this.props.name}
+          ref='select'
           value={this.state.value}
           onChange={this.onChangeSelect}
           style={styles.select}
@@ -158,5 +171,5 @@ SimpleSelect.propTypes = {
   styles: React.PropTypes.object,
   allowBlank: React.PropTypes.bool,
   allowOtherValues: React.PropTypes.bool,
-  onNewValue: React.PropTypes.func
+  onChange: React.PropTypes.func
 };
