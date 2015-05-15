@@ -32,7 +32,15 @@ let styles = {
 };
 
 function renderOption(option, i) {
-  return <option key={i} value={option}>{option}</option>;
+  return <option key={i} value={option.value}>{option.text}</option>;
+}
+
+function normaliseOption(option) {
+  if (typeof option === 'string') {
+    return {value: option, text: option};
+  } else {
+    return option;
+  }
 }
 
 export default class SimpleSelect extends React.Component {
@@ -44,18 +52,22 @@ export default class SimpleSelect extends React.Component {
       options.unshift('');
     }
     if (this.props.allowOtherValues) {
-      options.push(OTHER);
+      options.push(normaliseOption(OTHER));
     }
     this.newValue = false;
     this.state = {
       mode: 'select',
       value: this.props.value,
-      options: options
+      options: options.map(normaliseOption)
     };
     this.onChangeSelect = this.onChangeSelect.bind(this);
     this.onConfirmClicked = this.onConfirmClicked.bind(this);
     this.onCancelClicked = this.onCancelClicked.bind(this);
     this.onInputKeyDown = this.onInputKeyDown.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({options: nextProps.options.map(normaliseOption)});
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -81,8 +93,8 @@ export default class SimpleSelect extends React.Component {
     let nextOptions = Array.from(this.state.options);
     if ((inputValue || this.props.allowBlank) && inputValue !== nextValue) {
       nextValue = inputValue;
-      if (nextOptions.indexOf(inputValue) === -1) {
-        nextOptions.unshift(inputValue);
+      if (nextOptions.map(opt => { return opt.value; }).indexOf(inputValue) === -1) {
+        nextOptions.unshift(normaliseOption(inputValue));
         this.newValue = true;
       }
     }
