@@ -1,18 +1,18 @@
-# react-simple-select
+# react-easy-select
 A react component that provides a simple native HTML `<select>` element which can also allow the user to enter values not in the dropdown list and supports inline styles.
 
 ## Demo
-[http://colinf.github.io/react-simple-select/](http://colinf.github.io/react-simple-select/)
+[http://colinf.github.io/react-easy-select/](http://colinf.github.io/react-easy-select/)
 
 ## Installation
 Install into your project using NPM in the usual way. For example:
 
-`npm install --save-dev react-simple-select`
+`npm install --save-dev react-easy-select`
 
 ## Example Usage
 ```javascript
 React.render(
-    <SimpleSelect name='ex1'
+    <EasySelect name='ex1'
     options={teams}
     value={teams[1]}
     onChange={handleChange}/>,
@@ -61,8 +61,8 @@ An object containing styles to be used to supplement/override the default styles
 
 ```javascript
 let styles = {
-  simpleSelect: {
-    // styles for the surrounding div of the simple-select component
+  easySelect: {
+    // styles for the surrounding div of the easy-select component
   },
   select: {
     // styles for the <select> element

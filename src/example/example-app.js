@@ -1,6 +1,6 @@
 import 'babelify/polyfill';
 import React from 'react';
-import SimpleSelect from '../SimpleSelect.react';
+import EasySelect from '../EasySelect.react';
 
 let teams = ['Aberdeen', 'Celtic', 'Motherwell', 'Hamilton'];
 let OTHER = 'Other...';
@@ -11,7 +11,7 @@ function handleChange(change) {
 }
 //Example 1
 React.render(
-    <SimpleSelect name='ex1'
+    <EasySelect name='ex1'
     options={teams}
     value={teams[1]}
     onChange={handleChange}/>,
@@ -19,7 +19,7 @@ React.render(
 );
 //Example 2
 React.render(
-    <SimpleSelect name='ex2'
+    <EasySelect name='ex2'
     options={teams}
     value={teams[2]}
     allowOtherValues={true}
@@ -28,7 +28,7 @@ React.render(
 );
 //Example 3
 React.render(
-    <SimpleSelect name='ex3'
+    <EasySelect name='ex3'
     options={teams}
     allowOtherValues={true}
     allowBlank

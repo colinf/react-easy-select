@@ -8,7 +8,7 @@ let mode = {
 let OTHER = 'Other...';
 
 let styles = {
-  simpleSelect: {
+  easySelect: {
     width: 120
   },
   select: {
@@ -43,7 +43,7 @@ function normaliseOption(option) {
   }
 }
 
-export default class SimpleSelect extends React.Component {
+export default class EasySelect extends React.Component {
 
   constructor(props) {
     super(props);
@@ -133,7 +133,7 @@ export default class SimpleSelect extends React.Component {
 
   renderSelect(styles) {
     return (
-      <div style={styles.simpleSelect}>
+      <div style={styles.easySelect}>
         <select name={this.props.name}
           ref='select'
           value={this.state.value}
@@ -149,7 +149,7 @@ export default class SimpleSelect extends React.Component {
   renderInput(styles) {
 
     return (
-      <div style={styles.simpleSelect}>
+      <div style={styles.easySelect}>
         <input autoFocus
           type='text'
           ref='input'
@@ -176,7 +176,7 @@ export default class SimpleSelect extends React.Component {
 
 }
 
-SimpleSelect.propTypes = {
+EasySelect.propTypes = {
   options: React.PropTypes.array.isRequired,
   name: React.PropTypes.string,
   value: React.PropTypes.string,
