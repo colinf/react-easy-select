@@ -165,8 +165,8 @@ export default class SimpleSelect extends React.Component {
 }
 
 SimpleSelect.propTypes = {
+  options: React.PropTypes.array.isRequired,
   name: React.PropTypes.string,
-  options: React.PropTypes.array,
   value: React.PropTypes.string,
   styles: React.PropTypes.object,
   allowBlank: React.PropTypes.bool,
