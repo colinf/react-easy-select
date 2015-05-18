@@ -46,6 +46,13 @@ _react2['default'].render(_react2['default'].createElement(_EasySelectReact2['de
             color: 'black'
         }
     } }), document.getElementById('ex3'));
+//Example 4
+_react2['default'].render(_react2['default'].createElement(_EasySelectReact2['default'], { name: 'ex4',
+    options: teams,
+    value: teams[3],
+    allowOtherValues: true,
+    noButtons: true,
+    onChange: handleChange }), document.getElementById('ex4'));
 
 },{"../EasySelect.react":265,"babelify/polyfill":91,"react":264}],2:[function(require,module,exports){
 (function (global){
@@ -25401,6 +25408,24 @@ var EasySelect = (function (_React$Component) {
     key: 'renderInput',
     value: function renderInput(styles) {
 
+      var buttons = undefined;
+      if (!this.props.noButtons) {
+        buttons = _react2['default'].createElement(
+          'span',
+          null,
+          _react2['default'].createElement(
+            'button',
+            { type: 'button', style: styles.confirmButton, onClick: this.onConfirmClicked },
+            '✔'
+          ),
+          _react2['default'].createElement(
+            'button',
+            { type: 'button', style: styles.cancelButton, onClick: this.onCancelClicked },
+            '✘'
+          )
+        );
+      }
+
       return _react2['default'].createElement(
         'div',
         { style: styles.easySelect },
@@ -25411,16 +25436,7 @@ var EasySelect = (function (_React$Component) {
           onKeyDown: this.onInputKeyDown,
           style: styles.input
         }),
-        _react2['default'].createElement(
-          'button',
-          { type: 'button', style: styles.confirmButton, onClick: this.onConfirmClicked },
-          '✔'
-        ),
-        _react2['default'].createElement(
-          'button',
-          { type: 'button', style: styles.cancelButton, onClick: this.onCancelClicked },
-          '✘'
-        )
+        buttons
       );
     }
   }, {
@@ -25448,6 +25464,7 @@ EasySelect.propTypes = {
   styles: _react2['default'].PropTypes.object,
   allowBlank: _react2['default'].PropTypes.bool,
   allowOtherValues: _react2['default'].PropTypes.bool,
+  noButtons: _react2['default'].PropTypes.bool,
   onChange: _react2['default'].PropTypes.func
 };
 module.exports = exports['default'];

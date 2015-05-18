@@ -34,16 +34,26 @@ React.render(
     allowBlank
     onChange={handleChange}
     styles = {{
-    	confirmButton: {
-    		backgroundColor: 'green',
-    		color: 'black'
-    	},
-    	cancelButton: {
-    		backgroundColor: 'red',
-    		color: 'black'
-    	}
+        confirmButton: {
+            backgroundColor: 'green',
+            color: 'black'
+        },
+        cancelButton: {
+            backgroundColor: 'red',
+            color: 'black'
+        }
     }}/>,
     document.getElementById('ex3')
+);
+//Example 4
+React.render(
+    <EasySelect name='ex4'
+    options={teams}
+    value={teams[3]}
+    allowOtherValues={true}
+    noButtons={true}
+    onChange={handleChange}/>,
+    document.getElementById('ex4')
 );
 
 

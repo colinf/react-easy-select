@@ -148,6 +148,16 @@ export default class EasySelect extends React.Component {
 
   renderInput(styles) {
 
+    let buttons;
+    if (!this.props.noButtons) {
+      buttons = (
+        <span>
+          <button type='button' style={styles.confirmButton} onClick={this.onConfirmClicked}>✔</button>
+          <button type='button' style={styles.cancelButton} onClick={this.onCancelClicked}>✘</button>
+        </span>
+      );
+    }
+
     return (
       <div style={styles.easySelect}>
         <input autoFocus
@@ -157,8 +167,7 @@ export default class EasySelect extends React.Component {
           onKeyDown={this.onInputKeyDown}
           style={styles.input}
         />
-        <button type='button' style={styles.confirmButton} onClick={this.onConfirmClicked}>✔</button>
-        <button type='button' style={styles.cancelButton} onClick={this.onCancelClicked}>✘</button>
+        {buttons}
       </div>
     );
   }
@@ -183,5 +192,6 @@ EasySelect.propTypes = {
   styles: React.PropTypes.object,
   allowBlank: React.PropTypes.bool,
   allowOtherValues: React.PropTypes.bool,
+  noButtons: React.PropTypes.bool,
   onChange: React.PropTypes.func
 };

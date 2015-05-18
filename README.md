@@ -27,12 +27,13 @@ function handleChange(change) {
 ```
 
 ## Properties
-- [options: React.PropTypes.array.isRequired](#options),
-- [name: React.PropTypes.string](#name),
-- [value: React.PropTypes.string](#value),
-- [styles: React.PropTypes.object](#styles),
-- [allowBlank: React.PropTypes.bool](#allowblank),
-- [allowOtherValues: React.PropTypes.bool](#allowothervalues),
+- [options: React.PropTypes.array.isRequired](#options)
+- [name: React.PropTypes.string](#name)
+- [value: React.PropTypes.string](#value)
+- [styles: React.PropTypes.object](#styles)
+- [allowBlank: React.PropTypes.bool](#allowblank)
+- [allowOtherValues: React.PropTypes.bool](#allowothervalues)
+- [noButtons: React.PropTypes.bool](#nobuttons)
 - [onChange: React.PropTypes.func](#onchange)
 
 ### options
@@ -83,6 +84,8 @@ let styles = {
 A boolean. If `true` then a blank entry is added at the start of the  dropdown list. This allows the value to be reset to be blank by the user where required.
 ### allowOtherValues
 A boolean. If `true` then an _Other..._ entry is added to the end of the dropdown list. Selecting this display an input text field to enter a value not in the dropdown.
+### noButtons
+A boolean. If set to `true` then no confirm/cancel buttons will be displayed when entering an _Other..._ value. The user can confirm or cancel using the _Enter_ or _Escape_ key respectively.
 ### onChange
 A handler function to be called when the selected value is changed. The function will be passed a single object in the form:
 
