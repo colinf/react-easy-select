@@ -2,3 +2,4 @@ node_modules
 spec
 .DS_Store
 *.sublime*
+*.log
