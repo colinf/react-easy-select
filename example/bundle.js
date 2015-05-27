@@ -25316,7 +25316,11 @@ var EasySelect = (function (_React$Component) {
   _createClass(EasySelect, [{
     key: 'componentWillReceiveProps',
     value: function componentWillReceiveProps(nextProps) {
-      this.setState({ options: nextProps.options.map(normaliseOption) });
+      this.setState({
+        mode: 'select',
+        options: nextProps.options.map(normaliseOption),
+        value: nextProps.value
+      });
     }
   }, {
     key: 'componentDidUpdate',

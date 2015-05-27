@@ -67,7 +67,11 @@ export default class EasySelect extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({options: nextProps.options.map(normaliseOption)});
+    this.setState({
+      mode: 'select',
+      options: nextProps.options.map(normaliseOption),
+      value: nextProps.value
+    });
   }
 
   componentDidUpdate(prevProps, prevState) {
