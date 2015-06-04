@@ -47,18 +47,11 @@ export default class EasySelect extends React.Component {
 
   constructor(props) {
     super(props);
-    let options = Array.from(this.props.options);
-    if (this.props.allowBlank) {
-      options.unshift('');
-    }
-    if (this.props.allowOtherValues) {
-      options.push(normaliseOption(OTHER));
-    }
     this.newValue = false;
     this.state = {
       mode: 'select',
       value: this.props.value,
-      options: options.map(normaliseOption)
+      options: this.props.options.map(normaliseOption)
     };
     this.onChangeSelect = this.onChangeSelect.bind(this);
     this.onConfirmClicked = this.onConfirmClicked.bind(this);
@@ -95,7 +88,7 @@ export default class EasySelect extends React.Component {
     let inputValue = this.refs.input.getDOMNode().value;
     let nextValue = this.state.value;
     let nextOptions = Array.from(this.state.options);
-    if ((inputValue || this.props.allowBlank) && inputValue !== nextValue) {
+    if ((inputValue) && inputValue !== nextValue) {
       nextValue = inputValue;
       if (nextOptions.map(opt => { return opt.value; }).indexOf(inputValue) === -1) {
         nextOptions.unshift(normaliseOption(inputValue));
@@ -136,6 +129,15 @@ export default class EasySelect extends React.Component {
   }
 
   renderSelect(styles) {
+
+    let options = Array.from(this.state.options);
+    if (this.props.allowBlank) {
+      options.unshift('');
+    }
+    if (this.props.allowOtherValues) {
+      options.push(normaliseOption(OTHER));
+    }
+
     return (
       <div style={styles.easySelect}>
         <select name={this.props.name}
@@ -144,7 +146,7 @@ export default class EasySelect extends React.Component {
           onChange={this.onChangeSelect}
           style={styles.select}
         >
-          {this.state.options.map(renderOption)}
+          {options.map(renderOption)}
         </select>
       </div>
     );    

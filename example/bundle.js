@@ -25292,18 +25292,11 @@ var EasySelect = (function (_React$Component) {
     _classCallCheck(this, EasySelect);
 
     _get(Object.getPrototypeOf(EasySelect.prototype), 'constructor', this).call(this, props);
-    var options = Array.from(this.props.options);
-    if (this.props.allowBlank) {
-      options.unshift('');
-    }
-    if (this.props.allowOtherValues) {
-      options.push(normaliseOption(OTHER));
-    }
     this.newValue = false;
     this.state = {
       mode: 'select',
       value: this.props.value,
-      options: options.map(normaliseOption)
+      options: this.props.options.map(normaliseOption)
     };
     this.onChangeSelect = this.onChangeSelect.bind(this);
     this.onConfirmClicked = this.onConfirmClicked.bind(this);
@@ -25346,7 +25339,7 @@ var EasySelect = (function (_React$Component) {
       var inputValue = this.refs.input.getDOMNode().value;
       var nextValue = this.state.value;
       var nextOptions = Array.from(this.state.options);
-      if ((inputValue || this.props.allowBlank) && inputValue !== nextValue) {
+      if (inputValue && inputValue !== nextValue) {
         nextValue = inputValue;
         if (nextOptions.map(function (opt) {
           return opt.value;
@@ -25393,6 +25386,15 @@ var EasySelect = (function (_React$Component) {
   }, {
     key: 'renderSelect',
     value: function renderSelect(styles) {
+
+      var options = Array.from(this.state.options);
+      if (this.props.allowBlank) {
+        options.unshift('');
+      }
+      if (this.props.allowOtherValues) {
+        options.push(normaliseOption(OTHER));
+      }
+
       return _react2['default'].createElement(
         'div',
         { style: styles.easySelect },
@@ -25404,7 +25406,7 @@ var EasySelect = (function (_React$Component) {
             onChange: this.onChangeSelect,
             style: styles.select
           },
-          this.state.options.map(renderOption)
+          options.map(renderOption)
         )
       );
     }
