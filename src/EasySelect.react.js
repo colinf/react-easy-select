@@ -47,7 +47,7 @@ export default class EasySelect extends React.Component {
 
   constructor(props) {
     super(props);
-    this.newValue = false;
+    this.isNewValue = false;
     this.state = {
       mode: 'select',
       value: this.props.value,
@@ -67,17 +67,6 @@ export default class EasySelect extends React.Component {
     });
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (this.props.onChange &&
-        this.state.value !== prevState.value) {
-      this.props.onChange({
-        select: React.findDOMNode(this.refs.select),
-        newValue: Boolean(this.newValue)
-      });
-    }
-    this.newValue = false;
-  }
-
   onCancelClicked() {
     this.setState({
         mode: mode.SELECT 
@@ -85,21 +74,30 @@ export default class EasySelect extends React.Component {
   }
 
   onConfirmClicked() {
-    let inputValue = this.refs.input.getDOMNode().value;
-    let nextValue = this.state.value;
+    let inputValue = React.findDOMNode(this.refs.input).value;
+    let myValue = this.state.value;
     let nextOptions = Array.from(this.state.options);
-    if ((inputValue) && inputValue !== nextValue) {
-      nextValue = inputValue;
-      if (nextOptions.map(opt => { return opt.value; }).indexOf(inputValue) === -1) {
+    let isNewValue = false;
+    let valueHasChanged = false;
+    if ((inputValue || this.props.allowBlank) && inputValue !== myValue) {
+      valueHasChanged = true;
+      myValue = inputValue;
+      if (inputValue && nextOptions.map(opt => { return opt.value; }).indexOf(inputValue) === -1) {
         nextOptions.unshift(normaliseOption(inputValue));
-        this.newValue = true;
+        isNewValue = true;
       }
     }
     this.setState({
-      value: nextValue,
+      value: myValue,
       mode: mode.SELECT,
       options: nextOptions
     });
+    if (valueHasChanged) {
+      this.props.onChange({
+        target: React.findDOMNode(this.refs.input),
+        isNewValue: Boolean(isNewValue)
+      });      
+    }
   }
 
   onInputKeyDown(event) {
@@ -123,7 +121,11 @@ export default class EasySelect extends React.Component {
       if (this.state.value !== event.target.value) {
         this.setState({
           value: event.target.value
-        });        
+        });
+        this.props.onChange({
+          target: React.findDOMNode(this.refs.select),
+          isNewValue: false
+        });   
       }
     }
   }

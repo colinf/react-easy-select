@@ -1,6 +1,6 @@
 {
   "name": "react-easy-select",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "An ES6 react html select element, allowing entry of other values and with inline styles",
   "main": "lib/EasySelect.react.js",
   "scripts": {

@@ -20,8 +20,8 @@ React.render(
 );
 
 function handleChange(change) {
-    if (change.newValue) {
-        FluxActions.newTeamAdded(change.select.value);
+    if (change.isNewValue) {
+        FluxActions.newTeamAdded(change.target.value);
     }
 }
 ```
@@ -91,8 +91,8 @@ A handler function to be called when the selected value is changed. The function
 
 ```javascript
 {
-    select: // the <select> DOMElement
-    newValue: // boolean, true if the select.value is new
+    target: // the <select> or <input> DOMElement as appropriate
+    isNewValue: // boolean, true if target.value is new
 }
 ```
 

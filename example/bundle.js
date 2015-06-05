@@ -18,10 +18,7 @@ var teams = Array.from(theTeams);
 var OTHER = 'Other...';
 
 function handleChange(change) {
-    if (change.newValue) {
-        teams = Array.from(theTeams).push(change.select.value);
-    }
-    document.getElementById(change.select.name + '-result').innerHTML = 'Selected value: ' + change.select.value + (change.newValue ? ' (new value)' : '');
+    document.getElementById(change.target.name + '-result').innerHTML = 'Selected value: ' + change.target.value + (change.isNewValue ? ' (new value)' : '');
 }
 //Example 1
 _react2['default'].render(_react2['default'].createElement(_EasySelectReact2['default'], { name: 'ex1',
@@ -30,11 +27,16 @@ _react2['default'].render(_react2['default'].createElement(_EasySelectReact2['de
 //Example 2
 _react2['default'].render(_react2['default'].createElement(_EasySelectReact2['default'], { name: 'ex2',
     options: teams,
-    value: teams[2],
-    allowOtherValues: true,
+    value: teams[1],
     onChange: handleChange }), document.getElementById('ex2'));
 //Example 3
 _react2['default'].render(_react2['default'].createElement(_EasySelectReact2['default'], { name: 'ex3',
+    options: teams,
+    value: teams[2],
+    allowOtherValues: true,
+    onChange: handleChange }), document.getElementById('ex3'));
+//Example 4
+_react2['default'].render(_react2['default'].createElement(_EasySelectReact2['default'], { name: 'ex4',
     options: teams,
     allowOtherValues: true,
     allowBlank: true,
@@ -48,14 +50,14 @@ _react2['default'].render(_react2['default'].createElement(_EasySelectReact2['de
             backgroundColor: 'red',
             color: 'black'
         }
-    } }), document.getElementById('ex3'));
-//Example 4
-_react2['default'].render(_react2['default'].createElement(_EasySelectReact2['default'], { name: 'ex4',
+    } }), document.getElementById('ex4'));
+//Example 5
+_react2['default'].render(_react2['default'].createElement(_EasySelectReact2['default'], { name: 'ex5',
     options: teams,
     value: teams[3],
     allowOtherValues: true,
     noButtons: true,
-    onChange: handleChange }), document.getElementById('ex4'));
+    onChange: handleChange }), document.getElementById('ex5'));
 
 },{"../EasySelect.react":265,"babelify/polyfill":91,"react":264}],2:[function(require,module,exports){
 (function (global){
@@ -25295,7 +25297,7 @@ var EasySelect = (function (_React$Component) {
     _classCallCheck(this, EasySelect);
 
     _get(Object.getPrototypeOf(EasySelect.prototype), 'constructor', this).call(this, props);
-    this.newValue = false;
+    this.isNewValue = false;
     this.state = {
       mode: 'select',
       value: this.props.value,
@@ -25319,17 +25321,6 @@ var EasySelect = (function (_React$Component) {
       });
     }
   }, {
-    key: 'componentDidUpdate',
-    value: function componentDidUpdate(prevProps, prevState) {
-      if (this.props.onChange && this.state.value !== prevState.value) {
-        this.props.onChange({
-          select: _react2['default'].findDOMNode(this.refs.select),
-          newValue: Boolean(this.newValue)
-        });
-      }
-      this.newValue = false;
-    }
-  }, {
     key: 'onCancelClicked',
     value: function onCancelClicked() {
       this.setState({
@@ -25339,23 +25330,32 @@ var EasySelect = (function (_React$Component) {
   }, {
     key: 'onConfirmClicked',
     value: function onConfirmClicked() {
-      var inputValue = this.refs.input.getDOMNode().value;
-      var nextValue = this.state.value;
+      var inputValue = _react2['default'].findDOMNode(this.refs.input).value;
+      var myValue = this.state.value;
       var nextOptions = Array.from(this.state.options);
-      if (inputValue && inputValue !== nextValue) {
-        nextValue = inputValue;
-        if (nextOptions.map(function (opt) {
+      var isNewValue = false;
+      var valueHasChanged = false;
+      if ((inputValue || this.props.allowBlank) && inputValue !== myValue) {
+        valueHasChanged = true;
+        myValue = inputValue;
+        if (inputValue && nextOptions.map(function (opt) {
           return opt.value;
         }).indexOf(inputValue) === -1) {
           nextOptions.unshift(normaliseOption(inputValue));
-          this.newValue = true;
+          isNewValue = true;
         }
       }
       this.setState({
-        value: nextValue,
+        value: myValue,
         mode: mode.SELECT,
         options: nextOptions
       });
+      if (valueHasChanged) {
+        this.props.onChange({
+          target: _react2['default'].findDOMNode(this.refs.input),
+          isNewValue: Boolean(isNewValue)
+        });
+      }
     }
   }, {
     key: 'onInputKeyDown',
@@ -25382,6 +25382,10 @@ var EasySelect = (function (_React$Component) {
         if (this.state.value !== event.target.value) {
           this.setState({
             value: event.target.value
+          });
+          this.props.onChange({
+            target: _react2['default'].findDOMNode(this.refs.select),
+            isNewValue: false
           });
         }
       }

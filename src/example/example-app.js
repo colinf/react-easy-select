@@ -7,11 +7,8 @@ let teams = Array.from(theTeams);
 let OTHER = 'Other...';
 
 function handleChange(change) {
-    if (change.newValue) {
-        teams = Array.from(theTeams).push(change.select.value);
-    }
-	document.getElementById(change.select.name+'-result').innerHTML =
-		'Selected value: ' + change.select.value + (change.newValue ? ' (new value)' : '');
+	document.getElementById(change.target.name+'-result').innerHTML =
+		'Selected value: ' + change.target.value + (change.isNewValue ? ' (new value)' : '');
 }
 //Example 1
 React.render(
@@ -24,14 +21,22 @@ React.render(
 React.render(
     <EasySelect name='ex2'
     options={teams}
-    value={teams[2]}
-    allowOtherValues={true}
+    value={teams[1]}
     onChange={handleChange}/>,
     document.getElementById('ex2')
 );
 //Example 3
 React.render(
     <EasySelect name='ex3'
+    options={teams}
+    value={teams[2]}
+    allowOtherValues={true}
+    onChange={handleChange}/>,
+    document.getElementById('ex3')
+);
+//Example 4
+React.render(
+    <EasySelect name='ex4'
     options={teams}
     allowOtherValues={true}
     allowBlank
@@ -46,17 +51,17 @@ React.render(
             color: 'black'
         }
     }}/>,
-    document.getElementById('ex3')
+    document.getElementById('ex4')
 );
-//Example 4
+//Example 5
 React.render(
-    <EasySelect name='ex4'
+    <EasySelect name='ex5'
     options={teams}
     value={teams[3]}
     allowOtherValues={true}
     noButtons={true}
     onChange={handleChange}/>,
-    document.getElementById('ex4')
+    document.getElementById('ex5')
 );
 
 
