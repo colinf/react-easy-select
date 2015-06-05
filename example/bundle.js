@@ -13,17 +13,20 @@ var _EasySelectReact = require('../EasySelect.react');
 
 var _EasySelectReact2 = _interopRequireDefault(_EasySelectReact);
 
-var teams = ['Aberdeen', 'Celtic', 'Motherwell', 'Hamilton'];
+var theTeams = ['Aberdeen', 'Celtic', 'Motherwell', 'Hamilton'];
+var teams = Array.from(theTeams);
 var OTHER = 'Other...';
 
 function handleChange(change) {
+    if (change.newValue) {
+        teams = Array.from(theTeams).push(change.select.value);
+    }
     document.getElementById(change.select.name + '-result').innerHTML = 'Selected value: ' + change.select.value + (change.newValue ? ' (new value)' : '');
 }
 //Example 1
 _react2['default'].render(_react2['default'].createElement(_EasySelectReact2['default'], { name: 'ex1',
     options: teams,
-    value: teams[1],
-    onChange: handleChange }), document.getElementById('ex1'));
+    value: teams[1] }), document.getElementById('ex1'));
 //Example 2
 _react2['default'].render(_react2['default'].createElement(_EasySelectReact2['default'], { name: 'ex2',
     options: teams,
@@ -25439,6 +25442,7 @@ var EasySelect = (function (_React$Component) {
           type: 'text',
           ref: 'input',
           name: this.props.name,
+          defaultValue: this.state.value,
           onKeyDown: this.onInputKeyDown,
           style: styles.input
         }),

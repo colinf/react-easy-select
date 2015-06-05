@@ -2,10 +2,14 @@ import 'babelify/polyfill';
 import React from 'react';
 import EasySelect from '../EasySelect.react';
 
-let teams = ['Aberdeen', 'Celtic', 'Motherwell', 'Hamilton'];
+const theTeams = ['Aberdeen', 'Celtic', 'Motherwell', 'Hamilton'];
+let teams = Array.from(theTeams);
 let OTHER = 'Other...';
 
 function handleChange(change) {
+    if (change.newValue) {
+        teams = Array.from(theTeams).push(change.select.value);
+    }
 	document.getElementById(change.select.name+'-result').innerHTML =
 		'Selected value: ' + change.select.value + (change.newValue ? ' (new value)' : '');
 }
@@ -13,8 +17,7 @@ function handleChange(change) {
 React.render(
     <EasySelect name='ex1'
     options={teams}
-    value={teams[1]}
-    onChange={handleChange}/>,
+    value={teams[1]}/>,
     document.getElementById('ex1')
 );
 //Example 2

@@ -170,6 +170,7 @@ export default class EasySelect extends React.Component {
           type='text'
           ref='input'
           name={this.props.name}
+          defaultValue={this.state.value}
           onKeyDown={this.onInputKeyDown}
           style={styles.input}
         />
